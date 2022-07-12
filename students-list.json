@@ -1,0 +1,95 @@
+{
+    "students": [
+      {
+        "id": "1",
+        "name": "Logan Osman",
+        "email": "Logan_Osman7495@qater.org",
+        "grade": 7
+      },
+      {
+        "id": "2",
+        "name": "Denis Palmer",
+        "email": "Denis_Palmer1717@gembat.biz",
+        "grade": 1
+      },
+      {
+        "id": "3",
+        "name": "Boris Oswald",
+        "email": "Boris_Oswald1655@kideod.biz",
+        "grade": 2
+      },
+      {
+        "id": "4",
+        "name": "Alan Driscoll",
+        "email": "Alan_Driscoll5564@twace.org",
+        "grade": 4
+      },
+      {
+        "id": "5",
+        "name": "Melanie Vaughan",
+        "email": "Melanie_Vaughan4613@famism.biz",
+        "grade": 7
+      },
+      {
+        "id": "6",
+        "name": "Aileen Sanchez",
+        "email": "Aileen_Sanchez2942@bulaffy.com",
+        "grade": 7
+      },
+      {
+        "id": "7",
+        "name": "Nathan Appleton",
+        "email": "Nathan_Appleton9761@cispeto.com",
+        "grade": 4
+      },
+      {
+        "id": "8",
+        "name": "Sydney Warden",
+        "email": "Sydney_Warden6896@vetan.org",
+        "grade": 2
+      },
+      {
+        "id": "9",
+        "name": "Josh Watson",
+        "email": "Josh_Watson7722@brety.org",
+        "grade": 5
+      },
+      {
+        "id": "10",
+        "name": "Javier Sawyer",
+        "email": "Javier_Sawyer1278@tonsy.org",
+        "grade": 6
+      },
+      {
+        "id": "11",
+        "name": "Anabel Lindsay",
+        "email": "Anabel_Lindsay7762@famism.biz",
+        "grade": 1
+      },
+      {
+        "id": "12",
+        "name": "Barney Squire",
+        "email": "Barney_Squire6899@infotech44.tech",
+        "grade": 2
+      },
+      {
+        "id": "13",
+        "name": "Hazel Grady",
+        "email": "Hazel_Grady2538@naiker.biz",
+        "grade": 3
+      },
+      {
+        "id": "14",
+        "name": "Henry Abbey",
+        "email": "Henry_Abbey6563@womeona.net",
+        "grade": 4
+      },
+      {
+        "id": "15",
+        "name": "Melinda Gordon",
+        "email": "Melinda_Gordon9378@irrepsy.com",
+        "grade": 5
+      }
+    ]
+  }
+  
