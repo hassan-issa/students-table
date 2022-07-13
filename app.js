@@ -16,11 +16,11 @@ function displayStudents(data) {
   students.forEach(student => {
     tableHTML +=
       `
-        <tr>
-                <td>${student.name}</td>
-                <td>${student.email}</td> 
-                <td>${student.grade}</td>
-                <td>${student.id}</td>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.name}</td>
+                <td class="py-4 px-6">${student.email}</td> 
+                <td class="py-4 px-6">${student.grade}</td>
+                <td class="py-4 px-6">${student.id}</td>
         </tr>
         `
   });
