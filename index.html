@@ -3,16 +3,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href="/dist/output.css" rel="stylesheet">
     <title>Student List</title>
 </head>
-<body>
-    <table>
+<body class="">
+    <table id="userTable" class="">
         <caption>Student List</caption>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Grade</th>
-            <th>ID</th>
+        <input type="search" id="searchInput" onkeyup={filterStudent()} placeholder="Search">
+        <tr class="">
+            <th class="">Name</th>
+            <th class="">Email</th>
+            <th class="">Grade</th>
+            <th class="">ID</th>
         </tr>
         <tbody class="student-table"></tbody>
     </table>
