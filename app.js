@@ -4,7 +4,7 @@ const root = document.querySelector(".student-table");
 const grade = document.getElementsByClassName("grade");
 
 // Fetch data
-fetch("./students-list.json")
+fetch("")
   .then(res => res.json())
   .then(data => data.students)
   .then(displayStudents)
@@ -18,10 +18,9 @@ function displayStudents(data) {
     tableHTML +=
       `
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.name}</td>
-                <td class="py-4 px-6">${student.email}</td> 
+                <td class="py-4 px-6 name font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.name}</td>
+                <td class="py-4 px-6 email">${student.email}</td> 
                 <td class="py-4 px-6 grade">${student.grade}</td>
-                <td class="py-4 px-6">${student.id}</td>
         </tr>
         `
   });
@@ -62,3 +61,29 @@ function searchGrade(event) {
       }
     }
   }
+
+  // Add a student
+  function editData(event) {
+    if(event.target.innerHTML === "Add") {
+      event.target.innerHTML = "Save"
+      let tableHTML = '';
+      tableHTML =
+        `
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fname" type="text" placeholder="Enter Name"></input></td>
+                  <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="femail" type="email" placeholder="Enter Email"></input></td>
+                  <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fnumber" type="number" placeholder="Enter Grade" grade"></input></td>
+          </tr>
+          `
+          root.innerHTML += tableHTML;
+    } else {
+      event.target.innerHTML = "Add"
+      const input = document.querySelectorAll(".userInput");
+      for(let i = 0; i < 3; i++) {
+        let inputTag = input[i];
+        let inputValue = inputTag.value;
+        inputTag.parentElement.innerHTML = inputValue;
+        inputTag.remove();
+      }
+    }
+  };
