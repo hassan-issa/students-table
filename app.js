@@ -63,7 +63,7 @@ function searchGrade(event) {
   }
 
   // Add a student
-  function editData(event) {
+  function addStudent(event) {
     if(event.target.innerHTML === "Add") {
       event.target.innerHTML = "Save"
       let tableHTML = '';
@@ -72,7 +72,9 @@ function searchGrade(event) {
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fname" type="text" placeholder="Enter Name"></input></td>
                   <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="femail" type="email" placeholder="Enter Email"></input></td>
-                  <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fnumber" type="number" placeholder="Enter Grade" grade"></input></td>
+                  <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fnumber" type="number" placeholder="Enter Grade" grade"></input></td>
+                  <td onclick="updateStudent(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
+                  <td onclick="updateStudent(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
           </tr>
           `
           root.innerHTML += tableHTML;
@@ -87,3 +89,38 @@ function searchGrade(event) {
       }
     }
   };
+
+  // Update or delete student
+  function updateStudent(event) {
+    let el = event.target;
+    let addButton = document.getElementsByClassName('add');
+    let tagToEdit = event.target.parentNode.children;
+    let prevName = tagToEdit[0].textContent;
+    let prevEmail = tagToEdit[1].textContent;
+    let prevGrade = tagToEdit[2].textContent;
+    
+    if(el.className[0] === 'd') {
+      el.parentElement.remove();
+      addButton[0].innerHTML = "Add";
+    } else {
+        el.parentElement.remove();
+        addButton[0].innerHTML = "Save";
+        let tableHTML = '';
+        tableHTML =
+          `
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fname" type="text" placeholder="Enter Name"></input></td>
+                    <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="femail" type="email" placeholder="Enter Email"></input></td>
+                    <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fnumber" type="number" placeholder="Enter Grade" grade"></input></td>
+                    <td onclick="updateStudent(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
+                    <td onclick="updateStudent(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
+            </tr>
+            `
+            root.innerHTML += tableHTML;
+    }
+
+    let input = document.getElementsByTagName("input");
+      input[1].value = prevName;
+      input[2].value = prevEmail;
+      input[3].value = prevGrade;
+  }
