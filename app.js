@@ -67,7 +67,7 @@ function searchGrade(event) {
     if(event.target.innerHTML === "Add") {
       event.target.innerHTML = "Save"
       let tableHTML = '';
-      tableHTML =
+      tableHTML +=
         `
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fname" type="text" placeholder="Enter Name"></input></td>
@@ -81,11 +81,26 @@ function searchGrade(event) {
     } else {
       event.target.innerHTML = "Add"
       const input = document.querySelectorAll(".userInput");
-      for(let i = 0; i < 3; i++) {
-        let inputTag = input[i];
-        let inputValue = inputTag.value;
-        inputTag.parentElement.innerHTML = inputValue;
-        inputTag.remove();
+      let name = input[0].value;
+      let email = input[1].value;
+      let grade = input[2].value;
+
+      if(name.length > 0) {
+        // Add to local storage
+        let studentData = {name, email, grade}
+        let array = [];
+        array.push(studentData);
+        array = array.concat(JSON.parse(localStorage.getItem('array')||'[]'));
+        localStorage.setItem("array", JSON.stringify(array));
+  
+        for (let i = 0; i < 3; i++) {
+          let inputTag = input[i];
+          let inputValue = inputTag.value;
+          inputTag.parentElement.innerHTML = inputValue;
+          inputTag.remove();
+        }
+      } else {
+       root.lastElementChild.remove();
       }
     }
   };
@@ -98,7 +113,16 @@ function searchGrade(event) {
     let prevName = tagToEdit[0].textContent;
     let prevEmail = tagToEdit[1].textContent;
     let prevGrade = tagToEdit[2].textContent;
-    
+
+     // Delete from local storage
+    let dataArray = (JSON.parse(localStorage.getItem('array')));
+    for(let i=0; i < dataArray.length; i++) {
+      if(dataArray[i].name === prevName && dataArray[i].email === prevEmail && dataArray[i].grade === prevGrade) {
+        dataArray.splice(dataArray.findIndex(s => s.name === prevName),1);
+        localStorage.setItem("array", JSON.stringify(dataArray));
+      }
+    }
+
     if(el.className[0] === 'd') {
       el.parentElement.remove();
       addButton[0].innerHTML = "Add";
@@ -117,10 +141,30 @@ function searchGrade(event) {
             </tr>
             `
             root.innerHTML += tableHTML;
+            let input = document.getElementsByTagName("input");
+            input[1].value = prevName;
+            input[2].value = prevEmail;
+            input[3].value = prevGrade;
     }
-
-    let input = document.getElementsByTagName("input");
-      input[1].value = prevName;
-      input[2].value = prevEmail;
-      input[3].value = prevGrade;
   }
+
+  // Reload local storage
+  window.onload = function() {
+    if(localStorage.length > 0) {
+      let dataArray = (JSON.parse(localStorage.getItem('array')));
+      dataArray.reverse().forEach(student => {
+        let tableHTML = '';
+      tableHTML =
+        `
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.name}</td>
+                  <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.email}</td>
+                  <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.grade}</td>
+                  <td onclick="updateStudent(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
+                  <td onclick="updateStudent(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
+          </tr>
+          `
+          root.innerHTML += tableHTML;
+       })
+    }
+  };
