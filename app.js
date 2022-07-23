@@ -114,7 +114,8 @@ function searchGrade(event) {
     let prevEmail = tagToEdit[1].textContent;
     let prevGrade = tagToEdit[2].textContent;
 
-     // Delete from local storage
+    if(el.className[0] === 'd') {
+    // Delete from local storage
     let dataArray = (JSON.parse(localStorage.getItem('array')));
     for(let i=0; i < dataArray.length; i++) {
       if(dataArray[i].name === prevName && dataArray[i].email === prevEmail && dataArray[i].grade === prevGrade) {
@@ -122,8 +123,6 @@ function searchGrade(event) {
         localStorage.setItem("array", JSON.stringify(dataArray));
       }
     }
-
-    if(el.className[0] === 'd') {
       el.parentElement.remove();
       addButton[0].innerHTML = "Add";
     } else {
