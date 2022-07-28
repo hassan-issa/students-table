@@ -10,9 +10,9 @@
     <div class="mx-auto mt-5">
         <table id="userTable" class="border-separate w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <div class="flex items-baseline">
-                <input type="search" id="searchInput" onkeyup={filterStudent()} placeholder="Search" class="block mb-5 p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-1/2">
+                <input type="search" id="searchInput" onkeyup={displayStudentsFromFetch()} placeholder="Search" class="block mb-5 p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-1/2">
                 <label for="grade" class="block mb-2 ml-5 font-medium text-gray-900 dark:text-gray-400"></label>
-                <select onchange="searchGrade(event)" id="grade" class="mb-5 p-4 bg-blue-600 text-white font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/7 p-3.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select onchange="filterGradeByDropdown(event)" id="grade" class="mb-5 p-4 bg-blue-600 text-white font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/7 p-3.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option selected="">Grade</option>
                 <option class="bg-slate-200 text-black text-left" value="1">1</option>
                 <option class="bg-slate-200 text-black" value="2">2</option>
@@ -22,8 +22,8 @@
                 <option class="bg-slate-200 text-black" value="6">6</option>
                 <option class="bg-slate-200 text-black" value="7">7</option>
                 </select>
-                <button onclick="addStudent(event)" class="add ml-auto bg-blue-600 hover:bg-blue-500 text-white font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/7 mb-5 p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="button">Add</button>
-                <button onclick="saveStudent(event)" class="add ml-auto bg-blue-600 hover:bg-blue-500 text-white font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/7 mb-5 p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="button">Save</button>
+                <button onclick="insertNewRowInputToList(event)" class="add ml-auto bg-blue-600 hover:bg-blue-500 text-white font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/7 mb-5 p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="button">Add</button>
+                <button onclick="removeRowAndAddReload()" class="save ml-auto bg-blue-600 hover:bg-blue-500 text-white font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/7 mb-5 p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="button">Save</button>
             </div>
 
             <tr class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
