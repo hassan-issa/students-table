@@ -80,47 +80,21 @@ function removeRowAndAddReload() {
     grade: input[2].value
   }
 
-  // let inputName = document.getElementById("fname");
-  // let inputEmail = document.getElementById("femail");
-  // let inputGrade = document.getElementById("fnumber");
-  // let bool = array.hasOwnProperty(indexOfRowToReplace);
+  // Remove previous row 
+  let prevTagToRemove = document.querySelectorAll(".x");
+  prevTagToRemove.forEach(item => item.remove())
+ 
+  // Push the new student obj to the array
+  array.push(student);
 
-  // let indexOfRowToReplace = array.findIndex((students) => students.email === student.email && students.grade === student.grade && students.name === student.name);
+  // Save to localstorage
+  localStorage.setItem('students', JSON.stringify(array));
 
-  // if(student.name !== inputName && indexOfRowToReplace === -1) {
-  //   console.log(indexOfRowToReplace)
-  //   console.log("brand new")
-  // } else {
-  //   console.log("already here")
-  // }
+  // Reload table to show the new student
+  root.innerHTML = "";
+  window.onload()
+} 
 
-    // Remove previous row 
-    let x = document.querySelectorAll(".x")[0];
-    x.remove();
-
-    // Push the new student obj to the array
-    array.push(student);
-
-    // Save to localstorage
-    localStorage.setItem('students', JSON.stringify(array));
-
-    // Reload table to show the new student
-    let tableHTML = '';
-      tableHTML =
-        `
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.name}</td>
-                  <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.email}</td>
-                  <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.grade}</td>
-                  <td onclick="replaceOldInputWithNewInput(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
-                  <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
-          </tr>
-          `
-    root.innerHTML += tableHTML;     
-  } 
-
-
-  
 // Delete row completely and including from local storage
 function removeRowAndFromLocalStorage(event) {
   let array = (JSON.parse(localStorage.getItem('students')));
@@ -144,59 +118,55 @@ function replaceOldInputWithNewInput(event) {
     email : tagToEdit.children[1].innerHTML,
     grade : tagToEdit.children[2].innerHTML
   }
-
-  event.target.parentNode.remove()
-  let tableHTML = '';
-  tableHTML =
-    `
-      <tr class="x bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fname" type="text" placeholder="Enter Name"></input></td>
-              <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="femail" type="email" placeholder="Enter Email"></input></td>
-              <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fnumber" type="number" placeholder="Enter Grade" grade"></input></td>
-              <td onclick="replaceOldInputWithNewInput(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
-              <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
-      </tr>
-      `
-  root.innerHTML += tableHTML;
+  tagToEdit.remove()
+  insertNewRowInputToList()
 
   // the new student info
   let inputName = document.getElementById("fname");
   let inputEmail = document.getElementById("femail");
   let inputGrade = document.getElementById("fnumber");
+
   inputName.value = prevStudentInfo.name;
   inputEmail.value = prevStudentInfo.email;
   inputGrade.value = prevStudentInfo.grade;
 
-  let student = {
-    name : inputName.value,
-    email : inputEmail.value,
-    grade : inputGrade.value
-  }
+  let b = document.querySelector('.student-table');
+  b.addEventListener('click', (e) => {
+    idOfSelectedParagraph = e.path[1].dataset.id;
+  });
+}
 
-  // the array of students
-  let array = JSON.parse(localStorage.getItem("students") || []);
-  localStorage.setItem("students", JSON.stringify(array) || []);
+function updateNewEditValue() {
+  let inputName = document.getElementById("fname");
+  let inputEmail = document.getElementById("femail");
+  let inputGrade = document.getElementById("fnumber");
+    let name = inputName.value;
+    let email = inputEmail.value;
+    let grade = inputGrade.value;
 
-  // the index of the studnet in the array
-  let indexOfRowToReplace = array.findIndex((students) => students.email === prevStudentInfo.email && students.grade === prevStudentInfo.grade && students.name === prevStudentInfo.name);
-  array[indexOfRowToReplace] = student;
-  localStorage.setItem("students", JSON.stringify(array) || []);
+    let array = JSON.parse(localStorage.getItem("students") || []);
+    console.log(idOfSelectedParagraph)
+    array[idOfSelectedParagraph] = {name, email, grade};
+    localStorage.setItem("students", JSON.stringify(array) || []);
+
+    root.innerHTML = "";
+    window.onload()
 }
 
 window.onload = function() {
     let a = (JSON.parse(localStorage.getItem('students')));
-    a.forEach(student => {
-    let tableHTML = '';
-    tableHTML =
-      `
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.name}</td>
-                <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.email}</td>
-                <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.grade}</td>
-                <td onclick="replaceOldInputWithNewInput(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
-                <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
-        </tr>
-        `
-        root.innerHTML += tableHTML;
-      })
+      for(let i=0;i<a.length;i++) {
+        let tableHTML = '';
+        tableHTML =
+          `
+            <tr data-id="${i}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].name]}</td>
+                    <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].email]}</td>
+                    <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].grade]}</td>
+                    <td onclick="replaceOldInputWithNewInput(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
+                    <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
+            </tr>
+            `
+            root.innerHTML += tableHTML;
+      }
 };
