@@ -55,7 +55,7 @@ function filterGradeByDropdown(event) {
   }
 
 // Insert a new row into the list
-function insertNewRowInputToList() {
+function insertNewRowInputToList(event) {
   let tableHTML = '';
   tableHTML =
     `
@@ -68,6 +68,13 @@ function insertNewRowInputToList() {
       </tr>
       `
   root.innerHTML += tableHTML;
+
+  // Hide the save button
+  let addButton = document.querySelector(".add");
+  addButton.style.display = "none";
+
+  let saveButton = document.querySelector(".save");
+  saveButton.style.display = "";
 }
 
 // Remove previous input row and reload into table
@@ -93,6 +100,14 @@ function removeRowAndAddReload() {
   // Reload table to show the new student
   root.innerHTML = "";
   window.onload()
+
+  // Hide the save button
+  let saveButton = document.querySelector(".save");
+  saveButton.style.display = "none";
+
+  // Hide the save button
+  let addButton = document.querySelector(".add");
+  addButton.style.display = "";
 } 
 
 // Delete row completely and including from local storage
@@ -134,9 +149,17 @@ function replaceOldInputWithNewInput(event) {
   b.addEventListener('click', (e) => {
     idOfSelectedParagraph = e.path[1].dataset.id;
   });
+
+  // Hide the save button
+  let saveButton = document.querySelector(".save");
+  saveButton.style.display = "none";
+  
+  // Hide the save button
+  let updateButton = document.querySelector(".update");
+  updateButton.style.display = "";
 }
 
-function updateNewEditValue() {
+function updateNewEditValue(event) {
   let inputName = document.getElementById("fname");
   let inputEmail = document.getElementById("femail");
   let inputGrade = document.getElementById("fnumber");
@@ -151,6 +174,14 @@ function updateNewEditValue() {
 
     root.innerHTML = "";
     window.onload()
+
+    // Hide the save button
+    let updateButton = document.querySelector(".update");
+    updateButton.style.display = "none";
+
+      // Hide the save button
+      let addButton = document.querySelector(".add");
+      addButton.style.display = "";
 }
 
 window.onload = function() {
