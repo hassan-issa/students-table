@@ -55,7 +55,7 @@ function filterGradeByDropdown(event) {
   }
 
 // Insert a new row into the list
-function insertNewRowInputToList(event) {
+function insertNewRowInputToList() {
   let tableHTML = '';
   tableHTML =
     `
@@ -69,10 +69,11 @@ function insertNewRowInputToList(event) {
       `
   root.innerHTML += tableHTML;
 
-  // Hide the save button
+  // Hide the add button
   let addButton = document.querySelector(".add");
   addButton.style.display = "none";
 
+  // Show the save button
   let saveButton = document.querySelector(".save");
   saveButton.style.display = "";
 }
@@ -99,7 +100,7 @@ function removeRowAndAddReload() {
 
   // Reload table to show the new student
   root.innerHTML = "";
-  window.onload()
+  window.onload();
 
   // Hide the save button
   let saveButton = document.querySelector(".save");
@@ -119,13 +120,28 @@ function removeRowAndFromLocalStorage(event) {
     email : x[1].innerHTML,
     grade : x[2].innerHTML
   }
+
   let indexOfRowToDelete = array.findIndex((students) => students.email === student.email);
   array.splice(indexOfRowToDelete, 1);
   localStorage.setItem("students", JSON.stringify(array));
   event.target.parentElement.remove()
 }
 
+// Get the index of the row clicked
+function findIndex() {
+  let b = document.querySelector('.student-table');
+  b.addEventListener('click', (e) => {
+    let x = e.path[1].dataset.id;
+    if(x !== undefined) {
+      idOfSelectedParagraph = x;
+    } 
+  });
+}
+
 function replaceOldInputWithNewInput(event) {
+
+  findIndex()
+
   // Replace old tag with new input tag that includes previous data
   let tagToEdit = event.target.parentElement;
   let prevStudentInfo = {
@@ -133,6 +149,7 @@ function replaceOldInputWithNewInput(event) {
     email : tagToEdit.children[1].innerHTML,
     grade : tagToEdit.children[2].innerHTML
   }
+
   tagToEdit.remove()
   insertNewRowInputToList()
 
@@ -145,59 +162,59 @@ function replaceOldInputWithNewInput(event) {
   inputEmail.value = prevStudentInfo.email;
   inputGrade.value = prevStudentInfo.grade;
 
-  let b = document.querySelector('.student-table');
-  b.addEventListener('click', (e) => {
-    idOfSelectedParagraph = e.path[1].dataset.id;
-  });
-
   // Hide the save button
   let saveButton = document.querySelector(".save");
   saveButton.style.display = "none";
   
-  // Hide the save button
+  // Hide the update button
   let updateButton = document.querySelector(".update");
   updateButton.style.display = "";
 }
 
-function updateNewEditValue(event) {
+function updateNewEditValue() {
   let inputName = document.getElementById("fname");
   let inputEmail = document.getElementById("femail");
   let inputGrade = document.getElementById("fnumber");
+
     let name = inputName.value;
     let email = inputEmail.value;
     let grade = inputGrade.value;
 
     let array = JSON.parse(localStorage.getItem("students") || []);
-    console.log(idOfSelectedParagraph)
+   
     array[idOfSelectedParagraph] = {name, email, grade};
     localStorage.setItem("students", JSON.stringify(array) || []);
 
     root.innerHTML = "";
     window.onload()
 
-    // Hide the save button
+    // Hide the update button
     let updateButton = document.querySelector(".update");
     updateButton.style.display = "none";
 
-      // Hide the save button
-      let addButton = document.querySelector(".add");
-      addButton.style.display = "";
+    // Hide the add button
+    let addButton = document.querySelector(".add");
+    addButton.style.display = "";
 }
 
 window.onload = function() {
+  if(localStorage.students && localStorage.students !== "undefined" && localStorage.students !== "null"){
     let a = (JSON.parse(localStorage.getItem('students')));
-      for(let i=0;i<a.length;i++) {
-        let tableHTML = '';
-        tableHTML =
+    for(let i=0;i<a.length;i++) {
+      let tableHTML = '';
+      tableHTML =
+        `
+          <tr data-id="${i}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].name]}</td>
+                  <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].email]}</td>
+                  <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].grade]}</td>
+                  <td onclick="replaceOldInputWithNewInput(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
+                  <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
+          </tr>
           `
-            <tr data-id="${i}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].name]}</td>
-                    <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].email]}</td>
-                    <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].grade]}</td>
-                    <td onclick="replaceOldInputWithNewInput(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
-                    <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
-            </tr>
-            `
-            root.innerHTML += tableHTML;
-      }
+          root.innerHTML += tableHTML;
+    }
+  } else {
+    return null;
+  }
 };
