@@ -88,10 +88,15 @@ function removeRowAndAddReload() {
     grade: input[2].value
   }
 
+ if(student.name.length <= 0 && student.email.length <= 0 && student.grade.length <= 0) {
+  alert("No information entered...")
+  let prevTagToRemove = document.querySelectorAll(".x");
+  prevTagToRemove.forEach(item => item.remove())
+ } else {
   // Remove previous row 
   let prevTagToRemove = document.querySelectorAll(".x");
   prevTagToRemove.forEach(item => item.remove())
- 
+  
   // Push the new student obj to the array
   array.push(student);
 
@@ -101,12 +106,12 @@ function removeRowAndAddReload() {
   // Reload table to show the new student
   root.innerHTML = "";
   window.onload();
-
+ }
   // Hide the save button
   let saveButton = document.querySelector(".save");
   saveButton.style.display = "none";
 
-  // Hide the save button
+  // Show the add button
   let addButton = document.querySelector(".add");
   addButton.style.display = "";
 } 
