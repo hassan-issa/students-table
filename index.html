@@ -14,13 +14,6 @@
                 <label for="grade" class="block mb-2 ml-5 font-medium text-gray-900 dark:text-gray-400"></label>
                 <select onchange="filterGradeByDropdown(event)" id="grade" class="mb-5 p-4 bg-blue-600 text-white font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/7 p-3.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option selected="">Grade</option>
-                <option class="bg-slate-200 text-black text-left" value="1">1</option>
-                <option class="bg-slate-200 text-black" value="2">2</option>
-                <option class="bg-slate-200 text-black" value="3">3</option>
-                <option class="bg-slate-200 text-black" value="4">4</option>
-                <option class="bg-slate-200 text-black" value="5">5</option>
-                <option class="bg-slate-200 text-black" value="6">6</option>
-                <option class="bg-slate-200 text-black" value="7">7</option>
                 </select>
                 <button onclick="insertNewRowInputToList()" class="add ml-auto bg-blue-600 hover:bg-blue-500 text-white font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/7 mb-5 p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="button">Add</button>
                 <button onclick="removeRowAndAddReload()" style="display:none;" class="save ml-auto bg-blue-600 hover:bg-blue-500 text-white font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/7 mb-5 p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="button">Save</button>
@@ -33,8 +26,8 @@
                 <th scope="col" class="py-3 px-5 grade w-5">Grade</th>
                 <th scope="col" class="py-3 px-5"></th>
                 <th scope="col" class="py-3 px-5"></th>
-
             </tr>
+            
             <tbody class="student-table"></tbody>
         </table>
     </div>

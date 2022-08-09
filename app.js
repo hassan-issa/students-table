@@ -1,7 +1,11 @@
 // Global variables
 let students = [];
+// Reterieves the entire body of the table.
 const root = document.querySelector(".student-table");
+// Retrieves all the grade elements displayed in the table. 
 const showGradeOnly = document.getElementsByClassName("grade");
+// Array created to manage the grades filter from the data in the table.
+let currentOption = [];
 
 // Display data from fetch
 function displayStudentsFromFetch(data) {
@@ -12,12 +16,12 @@ function displayStudentsFromFetch(data) {
       `
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <td class="py-4 px-6 name font-medium text-gray-900 whitespace-nowrap dark:text-white">${student.name}</td>
-                <td class="py-4 px-6 email">${student.email}</td> 
+                <td class="py-4 px-6 email">${student.email}</td>
                 <td class="py-4 px-6 grade">${student.grade}</td>
         </tr>
         `
   });
-  root.innerHTML = tableHTML
+  root.innerHTML = tableHTML;
 }
 
 // Search for student list using search bar
@@ -52,9 +56,9 @@ function filterGradeByDropdown(event) {
       tdArray.parentNode.style.display = "";
       }
     }
-  }
+}
 
-// Insert a new row into the list
+// Insert a new row into the table
 function insertNewRowInputToList() {
   let tableHTML = '';
   tableHTML =
@@ -67,12 +71,11 @@ function insertNewRowInputToList() {
               <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
       </tr>
       `
+  // Insert the created row into the HTML.
   root.innerHTML += tableHTML;
-
   // Hide the add button
   let addButton = document.querySelector(".add");
   addButton.style.display = "none";
-
   // Show the save button
   let saveButton = document.querySelector(".save");
   saveButton.style.display = "";
@@ -87,36 +90,35 @@ function removeRowAndAddReload() {
     email: input[1].value,
     grade: input[2].value
   }
-
  if(student.name.length <= 0 && student.email.length <= 0 && student.grade.length <= 0) {
   alert("No information entered...")
   let prevTagToRemove = document.querySelectorAll(".x");
   prevTagToRemove.forEach(item => item.remove())
  } else {
-  // Remove previous row 
+  // Remove previous row
   let prevTagToRemove = document.querySelectorAll(".x");
   prevTagToRemove.forEach(item => item.remove())
-  
-  // Push the new student obj to the array
+  // Push the new student obj to the local storage array
   array.push(student);
-
   // Save to localstorage
   localStorage.setItem('students', JSON.stringify(array));
-
   // Reload table to show the new student
   root.innerHTML = "";
-  window.onload();
+  reloadRowsIntoDisplay();
+  // Remove all grades from grades filter
+  emptyGradesElementOptions();
+  // Re-load the grade filter dropdown
+  addEachNumberToGradeFilter();
  }
   // Hide the save button
   let saveButton = document.querySelector(".save");
   saveButton.style.display = "none";
-
   // Show the add button
   let addButton = document.querySelector(".add");
   addButton.style.display = "";
-} 
+}
 
-// Delete row completely and including from local storage
+// Delete row completely, including from local storage
 function removeRowAndFromLocalStorage(event) {
   let array = (JSON.parse(localStorage.getItem('students')));
   let x = event.target.parentElement.children;
@@ -125,28 +127,34 @@ function removeRowAndFromLocalStorage(event) {
     email : x[1].innerHTML,
     grade : x[2].innerHTML
   }
-
-  let indexOfRowToDelete = array.findIndex((students) => students.email === student.email);
+  // Remove the Node from local storage
+  let indexOfRowToDelete = array.findIndex((students) => students.name === student.name);
   array.splice(indexOfRowToDelete, 1);
+  // Remove the number from the grades dropdown filter
+  currentOption.splice(indexOfRowToDelete, 1);
+  // Set local storage and remove node from DOM
   localStorage.setItem("students", JSON.stringify(array));
   event.target.parentElement.remove()
+  // Remove all grades from grades filter
+  emptyGradesElementOptions();
+  // Re-load the grade filter dropdown
+  addEachNumberToGradeFilter();
 }
 
-// Get the index of the row clicked
+// Find the index of the row clicked
 function findIndex() {
   let b = document.querySelector('.student-table');
   b.addEventListener('click', (e) => {
     let x = e.path[1].dataset.id;
     if(x !== undefined) {
       idOfSelectedParagraph = x;
-    } 
+    }
   });
 }
 
 function replaceOldInputWithNewInput(event) {
-
+  // Find the index of the row clicked
   findIndex()
-
   // Replace old tag with new input tag that includes previous data
   let tagToEdit = event.target.parentElement;
   let prevStudentInfo = {
@@ -154,55 +162,65 @@ function replaceOldInputWithNewInput(event) {
     email : tagToEdit.children[1].innerHTML,
     grade : tagToEdit.children[2].innerHTML
   }
-
   tagToEdit.remove()
   insertNewRowInputToList()
-
   // the new student info
   let inputName = document.getElementById("fname");
   let inputEmail = document.getElementById("femail");
   let inputGrade = document.getElementById("fnumber");
-
   inputName.value = prevStudentInfo.name;
   inputEmail.value = prevStudentInfo.email;
   inputGrade.value = prevStudentInfo.grade;
-
+  // Remove all grades from grades filter
+  emptyGradesElementOptions();
+  // Re-load the grade filter dropdown
+  addEachNumberToGradeFilter();
   // Hide the save button
   let saveButton = document.querySelector(".save");
   saveButton.style.display = "none";
-  
   // Hide the update button
   let updateButton = document.querySelector(".update");
   updateButton.style.display = "";
 }
 
+// Update the row selected and the grade element dropdown
 function updateNewEditValue() {
   let inputName = document.getElementById("fname");
   let inputEmail = document.getElementById("femail");
   let inputGrade = document.getElementById("fnumber");
-
+    // Retrieve the input fields from row
     let name = inputName.value;
     let email = inputEmail.value;
     let grade = inputGrade.value;
-
+    // Parse the student array in local storage
     let array = JSON.parse(localStorage.getItem("students") || []);
-   
+    // Update index in student array
     array[idOfSelectedParagraph] = {name, email, grade};
+    // Set the update index of array back into local storage
     localStorage.setItem("students", JSON.stringify(array) || []);
-
+    // Update the grade fitler element with new grade inputted
+    // Only add the number to Grade Select Filter if it does not already exist
+    if(!currentOption.includes(grade)){
+      currentOption[idOfSelectedParagraph] = grade;
+    }
+    // Clear the table and reload updated storage
     root.innerHTML = "";
-    window.onload()
-
+    reloadRowsIntoDisplay();
+    // Remove all grades from grades filter
+    emptyGradesElementOptions();
+    // Re-load the grade filter dropdown
+    addEachNumberToGradeFilter();
     // Hide the update button
     let updateButton = document.querySelector(".update");
     updateButton.style.display = "none";
-
-    // Hide the add button
+    // Show the add button
     let addButton = document.querySelector(".add");
     addButton.style.display = "";
 }
 
-window.onload = function() {
+// Reloads each row back into DOM from local storage.
+window.addEventListener('DOMContentLoaded', (reloadRowsIntoDisplay()));
+function reloadRowsIntoDisplay() {
   if(localStorage.students && localStorage.students !== "undefined" && localStorage.students !== "null"){
     let a = (JSON.parse(localStorage.getItem('students')));
     for(let i=0;i<a.length;i++) {
@@ -217,9 +235,33 @@ window.onload = function() {
                   <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
           </tr>
           `
+          // Insert row into DOM.
           root.innerHTML += tableHTML;
+          // Only add the number to Grade Select Filter if it does not already exist
+          if(!currentOption.includes(a[i].grade)){
+            currentOption.push(a[i].grade);
+          }
     }
   } else {
     return null;
   }
+};
+
+// Adds an option element to the grades dropdown select element
+window.addEventListener('DOMContentLoaded', (addEachNumberToGradeFilter()));
+function addEachNumberToGradeFilter() {
+  currentOption.forEach(x => {
+    let gradeDropDown = document.getElementById("grade");
+    let element = document.createElement("option");
+    element.className = "bg-slate-200 text-black";
+    element.className = "addedGradeOption";
+    element.value = x;
+    element.innerHTML = x;
+    gradeDropDown.append(element);
+  })
+};
+
+// Clear the grades dropdown filter
+function emptyGradesElementOptions() {
+  document.getElementById("grade").options.length = 1;
 };
