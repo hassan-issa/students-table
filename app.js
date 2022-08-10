@@ -90,8 +90,8 @@ function removeRowAndAddReload() {
     email: input[1].value,
     grade: input[2].value
   }
- if(student.name.length <= 0 && student.email.length <= 0 && student.grade.length <= 0) {
-  alert("No information entered...")
+ if(student.name.length <= 2) {
+  alert("Name must be 3 characters or greater.")
   let prevTagToRemove = document.querySelectorAll(".x");
   prevTagToRemove.forEach(item => item.remove())
  } else {
