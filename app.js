@@ -185,40 +185,33 @@ function updateNewEditValue() {
   let inputName = document.getElementById("fname");
   let inputEmail = document.getElementById("femail");
   let inputGrade = document.getElementById("fnumber");
-
     // Retrieve the input fields from row
     let name = inputName.value;
     let email = inputEmail.value;
     let grade = inputGrade.value;
-
     // Parse the student array in local storage
     let array = JSON.parse(localStorage.getItem("students") || []);
     // Update index in student array / local storage
     array[idOfSelectedParagraph] = {name, email, grade};
+    // Update the array inside of grades dropdown
+    let x = currentOption.indexOf(idOfSelectedParagraph);
+    let newArray = currentOption.slice(x, (x + 1));
+    currentOption = newArray;
     // Set the update index of array back into local storage
     localStorage.setItem("students", JSON.stringify(array) || []);
-
     // Clear the table and reload updated storage
     root.innerHTML = "";
     reloadRowsIntoDisplay();
-
     // Hide the update button
     let updateButton = document.querySelector(".update");
     updateButton.style.display = "none";
     // Show the add button
     let addButton = document.querySelector(".add");
     addButton.style.display = "";
-    
-    // Update grade in grades dropdown filter
-    let index2 = parseInt(idOfSelectedParagraph) + 1;
-    let newArray = currentOption.slice(idOfSelectedParagraph, index2);
-    currentOption = newArray;
-
     // Clear all of the option from the grades dropdown filter
     emptyGradesElementOptions();
     // Add the grades to the grades dropdown filter
     addEachNumberToGradeFilter();
-    console.log(currentOption);
 }
 
 // Reloads each row back into DOM from local storage.
