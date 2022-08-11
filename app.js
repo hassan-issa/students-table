@@ -90,6 +90,17 @@ function removeRowAndAddReload() {
     email: input[1].value,
     grade: input[2].value
   }
+  if(student.name.length <= 2){
+    alert("Name must be 3 characters or greater.")
+    let prevTagToRemove = document.querySelectorAll(".x");
+    prevTagToRemove.forEach(item => item.remove());
+    // Hide the save button
+    let saveButton = document.querySelector(".save");
+    saveButton.style.display = "none";
+    // Show the add button
+    let addButton = document.querySelector(".add");
+    addButton.style.display = "";
+  } else {
   // Check if the grade already is in our grade array, if not then add.
   checkIfValueInGradeArray(student.grade) ? null : currentOption.push(student.grade);
   // Remove previous row
@@ -112,7 +123,8 @@ function removeRowAndAddReload() {
   // Show the add button
   let addButton = document.querySelector(".add");
   addButton.style.display = "";
-}
+  }
+};
 
 // Delete row completely, including from local storage and grades filter.
 function removeRowAndFromLocalStorage(event) {
@@ -136,7 +148,7 @@ function removeRowAndFromLocalStorage(event) {
   emptyGradesElementOptions();
   // Re-load the grade filter dropdown
   addEachNumberToGradeFilter();
-}
+};
 
 // Find the index of the row clicked
 function findIndex() {
@@ -189,6 +201,12 @@ function updateNewEditValue() {
     let name = inputName.value;
     let email = inputEmail.value;
     let grade = inputGrade.value;
+    if(name.length <= 2){
+      alert("Name must be 3 characters or greater.")
+      // Hide the add button
+      let addButton = document.querySelector(".add");
+      addButton.style.display = "none";
+    } else {
     // Parse the student array in local storage
     let array = JSON.parse(localStorage.getItem("students") || []);
     // Update index in student array / local storage
@@ -212,7 +230,8 @@ function updateNewEditValue() {
     emptyGradesElementOptions();
     // Add the grades to the grades dropdown filter
     addEachNumberToGradeFilter();
-}
+  }
+};
 
 // Reloads each row back into DOM from local storage.
 window.addEventListener('DOMContentLoaded', (reloadRowsIntoDisplay()));
