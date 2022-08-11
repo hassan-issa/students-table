@@ -90,11 +90,8 @@ function removeRowAndAddReload() {
     email: input[1].value,
     grade: input[2].value
   }
- if(student.name.length <= 2) {
-  alert("Name must be 3 characters or greater.")
-  let prevTagToRemove = document.querySelectorAll(".x");
-  prevTagToRemove.forEach(item => item.remove())
- } else {
+  // Check if the grade already is in our grade array, if not then add.
+  checkIfValueInGradeArray(student.grade) ? null : currentOption.push(student.grade);
   // Remove previous row
   let prevTagToRemove = document.querySelectorAll(".x");
   prevTagToRemove.forEach(item => item.remove())
@@ -105,11 +102,10 @@ function removeRowAndAddReload() {
   // Reload table to show the new student
   root.innerHTML = "";
   reloadRowsIntoDisplay();
-  // Remove all grades from grades filter
+  // Clear all of the option from the grades dropdown filter
   emptyGradesElementOptions();
-  // Re-load the grade filter dropdown
+  // Add the grades to the grades dropdown filter
   addEachNumberToGradeFilter();
- }
   // Hide the save button
   let saveButton = document.querySelector(".save");
   saveButton.style.display = "none";
@@ -118,7 +114,7 @@ function removeRowAndAddReload() {
   addButton.style.display = "";
 }
 
-// Delete row completely, including from local storage
+// Delete row completely, including from local storage and grades filter.
 function removeRowAndFromLocalStorage(event) {
   let array = (JSON.parse(localStorage.getItem('students')));
   let x = event.target.parentElement.children;
@@ -131,7 +127,8 @@ function removeRowAndFromLocalStorage(event) {
   let indexOfRowToDelete = array.findIndex((students) => students.name === student.name);
   array.splice(indexOfRowToDelete, 1);
   // Remove the number from the grades dropdown filter
-  currentOption.splice(indexOfRowToDelete, 1);
+  let boolean = checkIfTheSameGradeExist(student.grade);
+  boolean ? null: currentOption.splice(indexOfRowToDelete, 1);
   // Set local storage and remove node from DOM
   localStorage.setItem("students", JSON.stringify(array));
   event.target.parentElement.remove()
@@ -188,34 +185,40 @@ function updateNewEditValue() {
   let inputName = document.getElementById("fname");
   let inputEmail = document.getElementById("femail");
   let inputGrade = document.getElementById("fnumber");
+
     // Retrieve the input fields from row
     let name = inputName.value;
     let email = inputEmail.value;
     let grade = inputGrade.value;
+
     // Parse the student array in local storage
     let array = JSON.parse(localStorage.getItem("students") || []);
-    // Update index in student array
+    // Update index in student array / local storage
     array[idOfSelectedParagraph] = {name, email, grade};
     // Set the update index of array back into local storage
     localStorage.setItem("students", JSON.stringify(array) || []);
-    // Update the grade fitler element with new grade inputted
-    // Only add the number to Grade Select Filter if it does not already exist
-    if(!currentOption.includes(grade)){
-      currentOption[idOfSelectedParagraph] = grade;
-    }
+
     // Clear the table and reload updated storage
     root.innerHTML = "";
     reloadRowsIntoDisplay();
-    // Remove all grades from grades filter
-    emptyGradesElementOptions();
-    // Re-load the grade filter dropdown
-    addEachNumberToGradeFilter();
+
     // Hide the update button
     let updateButton = document.querySelector(".update");
     updateButton.style.display = "none";
     // Show the add button
     let addButton = document.querySelector(".add");
     addButton.style.display = "";
+    
+    // Update grade in grades dropdown filter
+    let index2 = parseInt(idOfSelectedParagraph) + 1;
+    let newArray = currentOption.slice(idOfSelectedParagraph, index2);
+    currentOption = newArray;
+
+    // Clear all of the option from the grades dropdown filter
+    emptyGradesElementOptions();
+    // Add the grades to the grades dropdown filter
+    addEachNumberToGradeFilter();
+    console.log(currentOption);
 }
 
 // Reloads each row back into DOM from local storage.
@@ -238,9 +241,7 @@ function reloadRowsIntoDisplay() {
           // Insert row into DOM.
           root.innerHTML += tableHTML;
           // Only add the number to Grade Select Filter if it does not already exist
-          if(!currentOption.includes(a[i].grade)){
-            currentOption.push(a[i].grade);
-          }
+          checkIfValueInGradeArray(a[i].grade) ? null : currentOption.push(a[i].grade);
     }
   } else {
     return null;
@@ -257,7 +258,7 @@ function addEachNumberToGradeFilter() {
     element.className = "addedGradeOption";
     element.value = x;
     element.innerHTML = x;
-    gradeDropDown.append(element);
+    gradeDropDown.appendChild(element);
   })
 };
 
@@ -265,3 +266,28 @@ function addEachNumberToGradeFilter() {
 function emptyGradesElementOptions() {
   document.getElementById("grade").options.length = 1;
 };
+
+// Check if the number already exists in our grades array
+function checkIfValueInGradeArray(value) {
+  if(currentOption.includes(value)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// Check if the same number already exist in student data
+function checkIfTheSameGradeExist(value) {
+  let boxOfGrades = []
+  let eachGrade = document.getElementsByClassName("grade");
+  for(let i=1;i<eachGrade.length;i++) {
+    boxOfGrades.push(eachGrade[i].innerHTML)
+  }
+  const filtered = boxOfGrades.filter((v, i) => boxOfGrades.indexOf(v) !== i)
+  if(filtered.includes(value)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
