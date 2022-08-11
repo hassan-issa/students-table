@@ -92,14 +92,20 @@ function removeRowAndAddReload() {
   }
   if(student.name.length <= 2){
     alert("Name must be 3 characters or greater.")
-    let prevTagToRemove = document.querySelectorAll(".x");
-    prevTagToRemove.forEach(item => item.remove());
-    // Hide the save button
+    // Show the save button
     let saveButton = document.querySelector(".save");
-    saveButton.style.display = "none";
-    // Show the add button
+    saveButton.style.display = "";
+    // Hide the add button
     let addButton = document.querySelector(".add");
-    addButton.style.display = "";
+    addButton.style.display = "none";
+  } else if (!isValidEmail(student.email)) {
+    alert("Please enter a valid email.")
+    // Show the save button
+    let saveButton = document.querySelector(".save");
+    saveButton.style.display = "";
+    // Hide the add button
+    let addButton = document.querySelector(".add");
+    addButton.style.display = "none";
   } else {
   // Check if the grade already is in our grade array, if not then add.
   checkIfValueInGradeArray(student.grade) ? null : currentOption.push(student.grade);
@@ -203,6 +209,17 @@ function updateNewEditValue() {
     let grade = inputGrade.value;
     if(name.length <= 2){
       alert("Name must be 3 characters or greater.")
+      // Hide the save button
+      let saveButton = document.querySelector(".save");
+      saveButton.style.display = "none";
+      // Hide the add button
+      let addButton = document.querySelector(".add");
+      addButton.style.display = "none";
+    } else if (!isValidEmail(email)) {
+      alert("Please enter a valid email.")
+      // Hide the save button
+      let saveButton = document.querySelector(".save");
+      saveButton.style.display = "none";
       // Hide the add button
       let addButton = document.querySelector(".add");
       addButton.style.display = "none";
@@ -303,3 +320,11 @@ function checkIfTheSameGradeExist(value) {
   }
 }
 
+// Check if email is valid
+function isValidEmail (string) {
+  // The regular expression used by [type="email"]
+  var regex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  // Test the string against the regular expression
+  return regex.test(string);
+}
