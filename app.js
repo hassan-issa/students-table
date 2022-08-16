@@ -134,26 +134,30 @@ function removeRowAndAddReload() {
 
 // Delete row completely, including from local storage and grades filter.
 function removeRowAndFromLocalStorage(event) {
-  let array = (JSON.parse(localStorage.getItem('students')));
-  let x = event.target.parentElement.children;
-  let student = {
-    name : x[0].innerHTML,
-    email : x[1].innerHTML,
-    grade : x[2].innerHTML
-  }
-  // Remove the Node from local storage
-  let indexOfRowToDelete = array.findIndex((students) => students.name === student.name);
-  array.splice(indexOfRowToDelete, 1);
-  // Remove the number from the grades dropdown filter
-  let boolean = checkIfTheSameGradeExist(student.grade);
-  boolean ? null: currentOption.splice(indexOfRowToDelete, 1);
-  // Set local storage and remove node from DOM
-  localStorage.setItem("students", JSON.stringify(array));
-  event.target.parentElement.remove()
-  // Remove all grades from grades filter
-  emptyGradesElementOptions();
-  // Re-load the grade filter dropdown
-  addEachNumberToGradeFilter();
+  if(confirm("Are you sure you would like to delete?")) {
+    let array = (JSON.parse(localStorage.getItem('students')));
+    let x = event.target.parentElement.children;
+    let student = {
+      name : x[0].innerHTML,
+      email : x[1].innerHTML,
+      grade : x[2].innerHTML
+    }
+    // Remove the Node from local storage
+    let indexOfRowToDelete = array.findIndex((students) => students.name === student.name);
+    array.splice(indexOfRowToDelete, 1);
+    // Remove the number from the grades dropdown filter
+    let boolean = checkIfTheSameGradeExist(student.grade);
+    boolean ? null: currentOption.splice(indexOfRowToDelete, 1);
+    // Set local storage and remove node from DOM
+    localStorage.setItem("students", JSON.stringify(array));
+    event.target.parentElement.remove()
+    // Remove all grades from grades filter
+    emptyGradesElementOptions();
+    // Re-load the grade filter dropdown
+    addEachNumberToGradeFilter();
+    } else {
+      return null;
+    }
 };
 
 // Find the index of the row clicked
