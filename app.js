@@ -98,7 +98,7 @@ function removeRowAndAddReload() {
     // Hide the add button
     let addButton = document.querySelector(".add");
     addButton.style.display = "none";
-  } else if (!isValidEmail(student.email)) {
+  } else if (!validateEmail(student.email)) {
     alert("Please enter a valid email.")
     // Show the save button
     let saveButton = document.querySelector(".save");
@@ -233,7 +233,7 @@ function updateNewEditValue() {
       // Hide the add button
       let addButton = document.querySelector(".add");
       addButton.style.display = "none";
-    } else if (!isValidEmail(email)) {
+    } else if (!validateEmail(email)) {
       alert("Please enter a valid email.")
       // Hide the save button
       let saveButton = document.querySelector(".save");
@@ -339,10 +339,7 @@ function checkIfTheSameGradeExist(value) {
 }
 
 // Check if email is valid
-function isValidEmail (string) {
-  // The regular expression used by [type="email"]
-  var regex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-  // Test the string against the regular expression
-  return regex.test(string);
-}
+function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+};  
