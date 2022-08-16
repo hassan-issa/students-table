@@ -177,8 +177,22 @@ function replaceOldInputWithNewInput(event) {
     email : tagToEdit.children[1].innerHTML,
     grade : tagToEdit.children[2].innerHTML
   }
-  tagToEdit.remove()
-  insertNewRowInputToList()
+  // Create the new student row to replace
+  let tr = document.createElement("tr");
+  tr.className = "x bg-white border-b dark:bg-gray-800 dark:border-gray-700";
+  tr.innerHTML = 
+  `
+  <tr class="x bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fname" type="text" placeholder="Enter Name"></input></td>
+          <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="femail" type="email" placeholder="Enter Email"></input></td>
+          <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fnumber" type="number" placeholder="Enter Grade" grade"></input></td>
+          <td onclick="replaceOldInputWithNewInput(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
+          <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
+  </tr>
+  `;
+  // Replace the row with a new row
+  let rowClickedToEdit = event.path[1];
+  rowClickedToEdit.replaceWith(tr);
   // the new student info
   let inputName = document.getElementById("fname");
   let inputEmail = document.getElementById("femail");
@@ -193,10 +207,14 @@ function replaceOldInputWithNewInput(event) {
   // Hide the save button
   let saveButton = document.querySelector(".save");
   saveButton.style.display = "none";
+  // Hide the add button
+  let addButton = document.querySelector(".add");
+  addButton.style.display = "none";
   // Hide the update button
   let updateButton = document.querySelector(".update");
   updateButton.style.display = "";
 }
+
 
 // Update the row selected and the grade element dropdown
 function updateNewEditValue() {
