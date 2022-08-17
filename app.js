@@ -65,7 +65,7 @@ function insertNewRowInputToList() {
     `
       <tr class="x bg-white border-b dark:bg-gray-800 dark:border-gray-700">
               <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput userName shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fname" type="text" placeholder="Enter Name"></input></td>
-              <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="femail" type="email" placeholder="Enter Email"></input></td>
+              <td class="py-4 email px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="femail" type="email" placeholder="Enter Email"></input></td>
               <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white"><input class="userInput shadow appearance-none border rounded py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fnumber" type="number" placeholder="Enter Grade" grade"></input></td>
               <td onclick="replaceOldInputWithNewInput(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
               <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
@@ -108,7 +108,16 @@ function removeRowAndAddReload() {
     // Hide the add button
     let addButton = document.querySelector(".add");
     addButton.style.display = "none";
-  } else {
+  } else if(checkIfEmailIsUnqiue(student.email)) {
+    alert("This email already exists.")
+        // Show the save button
+        let saveButton = document.querySelector(".save");
+        saveButton.style.display = "";
+        // Hide the add button
+        let addButton = document.querySelector(".add");
+        addButton.style.display = "none";
+  }
+  else {
   // Check if the grade already is in our grade array, if not then add.
   checkIfValueInGradeArray(student.grade) ? null : currentOption.push(student.grade);
   // Remove previous row
@@ -157,6 +166,13 @@ function removeRowAndFromLocalStorage(event) {
     emptyGradesElementOptions();
     // Re-load the grade filter dropdown
     addEachNumberToGradeFilter();
+    // Make sure correct buttons are set
+    let updateButton = document.querySelector(".update");
+    updateButton.style.display = "none";
+    let saveButton = document.querySelector(".save");
+    saveButton.style.display = "none"
+    let addButton = document.querySelector(".add");
+    addButton.style.display = ""
     } else {
       return null;
     }
@@ -223,7 +239,6 @@ function replaceOldInputWithNewInput(event) {
   setFocusToTextBox();
 }
 
-
 // Update the row selected and the grade element dropdown
 function updateNewEditValue() {
   let inputName = document.getElementById("fname");
@@ -249,6 +264,14 @@ function updateNewEditValue() {
       // Hide the add button
       let addButton = document.querySelector(".add");
       addButton.style.display = "none";
+    } else if(checkIfEmailIsUnqiue(email)) {
+      alert("This email already exists.")
+          // Show the save button
+          let saveButton = document.querySelector(".save");
+          saveButton.style.display = "none";
+          // Hide the add button
+          let addButton = document.querySelector(".add");
+          addButton.style.display = "none";
     } else {
     // Parse the student array in local storage
     let array = JSON.parse(localStorage.getItem("students") || []);
@@ -287,7 +310,7 @@ function reloadRowsIntoDisplay() {
         `
           <tr data-id="${i}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <td class="name py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].name]}</td>
-                  <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].email]}</td>
+                  <td class="py-4 email px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].email]}</td>
                   <td class="py-4 px-6 grade font-medium text-gray-900 whitespace-nowrap dark:text-white">${[a[i].grade]}</td>
                   <td onclick="replaceOldInputWithNewInput(event)" class="edit py-4 px-6  bg-[url('./edit.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-indigo-300 cursor-pointer bg-no-repeat"></td>
                   <td onclick="removeRowAndFromLocalStorage(event)" class="delete py-4 px-6 bg-[url('./delete.svg')] bg-[length:15px_15px] bg-center border-2 hover:border-rose-300 cursor-pointer bg-no-repeat"></td>
@@ -367,3 +390,15 @@ root.addEventListener("keyup", (event) => {
 function setFocusToTextBox(){
   document.querySelector(".userName").focus();
 }
+
+// Check to see if email has already been used
+function checkIfEmailIsUnqiue(value) {
+  let emailAlreadyExist = "";
+  let eachEmailEntered = document.getElementsByClassName("email");
+  for(let i=0;i<eachEmailEntered.length;i++) {
+    let email = eachEmailEntered[i];
+    if(email.innerHTML === value) {
+      return true;
+    }
+  }
+};
