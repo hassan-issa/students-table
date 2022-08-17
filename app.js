@@ -347,3 +347,14 @@ function validateEmail(email) {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
 };  
+
+// Functionality to submit using "enter" keyword
+root.addEventListener("keyup", (event) => {
+  let updateButton = document.querySelector(".update");
+  let saveButton = document.querySelector(".save");
+  if (event.keyCode === 13 && updateButton.style.display === "") {
+    updateNewEditValue()
+  } else if (event.keyCode === 13 && saveButton.style.display === ""){
+    removeRowAndAddReload()
+  }
+});
