@@ -143,6 +143,17 @@ function removeRowAndAddReload() {
   }
 };
 
+// Find the index of the row clicked
+function findIndex() {
+  let b = document.querySelector('.student-table');
+  b.addEventListener('click', (e) => {
+    let x = e.path[1].dataset.id;
+    if(x !== undefined) {
+      idOfSelectedParagraph = x;
+    }
+  });
+}
+
 // Delete row completely, including from local storage and grades filter.
 function removeRowAndFromLocalStorage(event) {
   if(confirm("Are you sure you would like to delete?")) {
@@ -153,14 +164,18 @@ function removeRowAndFromLocalStorage(event) {
       email : x[1].innerHTML,
       grade : x[2].innerHTML
     }
-    // Remove the Node from local storage
-    let indexOfRowToDelete = array.findIndex((students) => students.name === student.name);
-    array.splice(indexOfRowToDelete, 1);
-
-    // Remove the number from the grades dropdown filter
+    // Check if the grade is already an option
     let boolean = checkIfTheSameGradeExist(student.grade);
-    boolean ? null: currentOption.splice(indexOfRowToDelete, 1);
-
+    // Find the index to delete
+    let indexOfRowToDelete = array.findIndex((students) => students.name === student.name);
+    // Convert the grade inputed to a string
+    let toStringOption = student.grade.toString();
+    // Find the index of the grade in the select dropdown element
+    let indexOfOptionToRemove = currentOption.indexOf(toStringOption);
+    // If the grade already exist, return null, if it only exists 1 than remove it from the grade dropdown filter.
+    boolean ? null: currentOption.splice(indexOfOptionToRemove, 1);
+    // Remove the Node from local storage
+    array.splice(indexOfRowToDelete, 1);
     // Set local storage and remove node from DOM
     localStorage.setItem("students", JSON.stringify(array));
     event.target.parentElement.remove()
@@ -180,17 +195,7 @@ function removeRowAndFromLocalStorage(event) {
     }
 };
 
-// Find the index of the row clicked
-function findIndex() {
-  let b = document.querySelector('.student-table');
-  b.addEventListener('click', (e) => {
-    let x = e.path[1].dataset.id;
-    if(x !== undefined) {
-      idOfSelectedParagraph = x;
-    }
-  });
-}
-
+// This function will replace the old row with a new row
 function replaceOldInputWithNewInput(event) {
   // Find the index of the row clicked
   findIndex()
@@ -426,7 +431,7 @@ function tableToCSV() {
   }
   // combine each row data with new line character
   csv_data = csv_data.join('\n');
-  // Call the download function
+  // call the download function
   downloadCSVFile(csv_data);
 }
 
@@ -439,7 +444,7 @@ function downloadCSVFile(csv_data) {
   // download process
   var temp_link = document.createElement('a');
   // Download csv file
-  temp_link.download = "Ta.csv";
+  temp_link.download = "Table.csv";
   var url = window.URL.createObjectURL(CSVFile);
   temp_link.href = url;
   // This link should not be displayed
